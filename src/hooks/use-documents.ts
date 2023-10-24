@@ -38,11 +38,9 @@ export type TDocument = TDocumentData & {
 };
 
 export const useDocuments = () => {
-  const [documents, setDocuments] = useState<DocumentData | null>(null);
-  const [document, setDocument] = useState<DocumentData | null>(null);
-  const [trashDocuments, setTrashDocuments] = useState<DocumentData | null>(
-    null
-  );
+  const [documents, setDocuments] = useState<DocumentData | null>();
+  const [document, setDocument] = useState<DocumentData | null>();
+  const [trashDocuments, setTrashDocuments] = useState<DocumentData | null>();
   const db = getFirestore(app);
   const { user } = useUser();
   const documentRef = collection(db, DOCUMENT_PATH);
@@ -118,6 +116,7 @@ export const useDocuments = () => {
         ...docSnap.data(),
       });
     } else {
+      setDocument(null);
       // console.log("No such document!");
     }
   };
@@ -199,10 +198,21 @@ export const useDocuments = () => {
     const docRef = doc(db, DOCUMENT_PATH, documentId);
     // console.log("get detail", documentId);
     return onSnapshot(docRef, { includeMetadataChanges: true }, (doc) => {
-      setDocument({
-        id: doc.id,
-        ...doc.data(),
-      });
+      if (doc.exists()) {
+        setDocument({
+          id: doc.id,
+          ...doc.data(),
+        });
+      } else {
+        setDocument(null);
+      }
+    });
+  };
+
+  const publishDocument = (documentId: string, isPublished: boolean) => {
+    const documentUpdateRef = doc(db, DOCUMENT_PATH, documentId);
+    return updateDoc(documentUpdateRef, {
+      isPublished,
     });
   };
 
@@ -225,5 +235,6 @@ export const useDocuments = () => {
     updateCover,
     removeCover,
     getDocDetail,
+    publishDocument,
   };
 };

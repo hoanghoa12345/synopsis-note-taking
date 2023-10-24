@@ -3,11 +3,13 @@ import { useUser } from "@/hooks/use-auth";
 import { useDocuments } from "@/hooks/use-documents";
 import { Timestamp } from "firebase/firestore";
 import { PlusCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const DocumentsPage = () => {
   const { user } = useUser();
   const { createDocument } = useDocuments();
+  const navigate = useNavigate();
   const onCreate = () => {
     const promise = createDocument({
       title: "Untitled",
@@ -19,6 +21,8 @@ const DocumentsPage = () => {
       icon: "",
       isPublished: false,
       creationTime: Timestamp.now(),
+    }).then((doc) => {
+      navigate(`/documents/${doc.id}`);
     });
     toast.promise(promise, {
       loading: "Creating a new note...",

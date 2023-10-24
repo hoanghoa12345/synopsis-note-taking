@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Banner } from "./banner";
 import { Menu } from "./menu";
+import { Publish } from "./publish";
 
 interface NavbarProps {
   isCollapsed: boolean;
@@ -43,7 +44,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
         <div className="flex items-center justify-between w-full">
           <Title initialData={document as TDocument} />
           <div className="flex items-center gap-x-2">
-            {/* <Publish initialData={document} /> */}
+            <Publish initialData={document as TDocument} />
             <Menu documentId={document.id} />
           </div>
         </div>

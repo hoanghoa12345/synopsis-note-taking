@@ -3,16 +3,13 @@ import { Toolbar } from "@/components/documents-page/document-id-page/toolbar";
 import Error from "@/components/documents-page/error";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TDocument, useDocuments } from "@/hooks/use-documents";
-import { lazy, useEffect, useMemo, useState, Suspense } from "react";
+import { lazy, useEffect, useMemo, Suspense } from "react";
 import { useParams } from "react-router-dom";
-import { useDebounce } from "use-debounce";
 
-const DocumentIdPage = () => {
+const DocumentPreview = () => {
   const { documentId } = useParams();
 
-  const { document, updateContent, getDocDetail} = useDocuments();
-  const [text, setText] = useState<string>();
-  const [debouncedText] = useDebounce(text, 1000);
+  const { document, getDocDetail } = useDocuments();
 
   const Editor = useMemo(
     () =>
@@ -27,18 +24,7 @@ const DocumentIdPage = () => {
     };
   }, [documentId]);
 
-  const onChange = (content: string) => {
-    setText(content);
-    // handle update text content
-  };
-
-  useEffect(() => {
-    if (debouncedText) {
-      updateContent(document?.id, debouncedText);
-      // console.log("updated document");
-    }
-  }, [debouncedText]);
-  
+  const onChange = () => {};
 
   if (document === undefined) {
     return (
@@ -57,14 +43,14 @@ const DocumentIdPage = () => {
   }
 
   if (document === null) {
-    return <Error/>;
+    return <Error />;
   }
 
   return (
     <div className="pb-40">
-      <Cover url={document.coverImage} />
+      <Cover preview url={document.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-        <Toolbar initialData={document as TDocument} />
+        <Toolbar preview initialData={document as TDocument} />
         <Suspense
           fallback={
             <div className="md:max-w-3xl lg:max-w-4xl mx-auto mt-10">
@@ -77,11 +63,16 @@ const DocumentIdPage = () => {
             </div>
           }
         >
-          <Editor key={document.id} onChange={onChange} initialContent={document.content} />
+          <Editor
+            key={document.id}
+            onChange={onChange}
+            initialContent={document.content}
+            editable={false}
+          />
         </Suspense>
       </div>
     </div>
   );
 };
 
-export default DocumentIdPage;
+export default DocumentPreview;

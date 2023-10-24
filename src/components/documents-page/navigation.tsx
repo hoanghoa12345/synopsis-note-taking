@@ -9,7 +9,7 @@ import {
   Trash,
 } from "lucide-react";
 import { ElementRef, useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "usehooks-ts";
 import { UserItem } from "./user-item";
 import { useDocuments } from "@/hooks/use-documents";
@@ -27,11 +27,12 @@ import { useSettings } from "@/hooks/use-settings";
 export const Navigation = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const params = useParams();
   const { user } = useUser();
   const { createDocument } = useDocuments();
-  const search = useSearch()
-  const settings = useSettings()
+  const search = useSearch();
+  const settings = useSettings();
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -126,6 +127,8 @@ export const Navigation = () => {
       icon: "",
       isPublished: false,
       creationTime: Timestamp.now(),
+    }).then((doc) => {
+      navigate(`/documents/${doc.id}`);
     });
     toast.promise(promise, {
       loading: "Creating a new note...",
@@ -164,12 +167,8 @@ export const Navigation = () => {
         </div>
         <div className="mt-4">
           <DocumentList />
-          <Item
-            onClick={handleCreate}
-            icon={Plus}
-            label="Add a page"
-          />
-           <Popover>
+          <Item onClick={handleCreate} icon={Plus} label="Add a page" />
+          <Popover>
             <PopoverTrigger className="w-full mt-4">
               <Item label="Trash" icon={Trash} onClick={() => {}} />
             </PopoverTrigger>
