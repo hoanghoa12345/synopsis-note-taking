@@ -46,6 +46,10 @@ const DocumentPreview = () => {
     return <Error />;
   }
 
+  if (!document.isPublished) {
+    return <Error />;
+  }
+
   return (
     <div className="pb-40">
       <Cover preview url={document.coverImage} />

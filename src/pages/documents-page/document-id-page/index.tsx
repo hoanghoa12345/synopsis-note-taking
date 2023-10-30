@@ -3,16 +3,26 @@ import { Toolbar } from "@/components/documents-page/document-id-page/toolbar";
 import Error from "@/components/documents-page/error";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TDocument, useDocuments } from "@/hooks/use-documents";
+import { useEmojiIcon } from "@/hooks/use-favicon";
 import { lazy, useEffect, useMemo, useState, Suspense } from "react";
 import { useParams } from "react-router-dom";
-import { useDebounce } from "use-debounce";
-
+import { useDebounce } from "usehooks-ts";
 const DocumentIdPage = () => {
   const { documentId } = useParams();
 
-  const { document, updateContent, getDocDetail} = useDocuments();
+  const { document, updateContent, getDocDetail } = useDocuments();
   const [text, setText] = useState<string>();
-  const [debouncedText] = useDebounce(text, 1000);
+  const debouncedValue = useDebounce<string | undefined>(text, 1000);
+
+  const {setFaviconEmoji} = useEmojiIcon()
+
+  useMemo(() => {
+    if(document && document.icon) {
+      setFaviconEmoji(document.icon)
+    }else {
+      setFaviconEmoji('📄')
+    }
+  },[document?.id])
 
   const Editor = useMemo(
     () =>
@@ -33,12 +43,11 @@ const DocumentIdPage = () => {
   };
 
   useEffect(() => {
-    if (debouncedText) {
-      updateContent(document?.id, debouncedText);
+    if (debouncedValue) {
+      updateContent(document?.id, debouncedValue);
       // console.log("updated document");
     }
-  }, [debouncedText]);
-  
+  }, [debouncedValue]);
 
   if (document === undefined) {
     return (
@@ -57,7 +66,7 @@ const DocumentIdPage = () => {
   }
 
   if (document === null) {
-    return <Error/>;
+    return <Error />;
   }
 
   return (
@@ -77,7 +86,11 @@ const DocumentIdPage = () => {
             </div>
           }
         >
-          <Editor key={document.id} onChange={onChange} initialContent={document.content} />
+          <Editor
+            key={document.id}
+            onChange={onChange}
+            initialContent={document.content}
+          />
         </Suspense>
       </div>
     </div>

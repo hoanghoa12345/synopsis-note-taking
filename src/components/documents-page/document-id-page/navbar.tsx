@@ -1,4 +1,5 @@
 import { MenuIcon } from "lucide-react";
+import { useDocumentTitle } from 'usehooks-ts'
 import { Title } from "./title";
 import { TDocument, useDocuments } from "@/hooks/use-documents";
 import { useEffect } from "react";
@@ -15,6 +16,7 @@ interface NavbarProps {
 export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   const { document, getById } = useDocuments();
   const { documentId } = useParams();
+  useDocumentTitle(document?.title || 'Untitled document')
 
   useEffect(() => {
     documentId && getById(documentId);
