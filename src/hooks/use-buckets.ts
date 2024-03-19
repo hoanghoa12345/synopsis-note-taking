@@ -11,7 +11,7 @@ export const useBuckets = () => {
         file,
         {
           cacheControl: "3600",
-          upsert: false,
+          upsert: true,
         }
       );
   const getPublicURL = (path: string) =>

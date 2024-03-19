@@ -31,7 +31,7 @@ export const CoverImageModal = () => {
       setFile(file);
       if (user?.uid && params.documentId) {
         const res = await uploadImage(user?.uid, params.documentId, file);
-        console.log("File uploaded: ", res.data?.path);
+        // console.log("File uploaded: ", res.data?.path);
         if (res.data?.path)
           await updateCover(params.documentId, res.data?.path);
       }

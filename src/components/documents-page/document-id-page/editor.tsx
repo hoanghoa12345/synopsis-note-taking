@@ -6,8 +6,6 @@ import { useBuckets } from "@/hooks/use-buckets";
 import { useUser } from "@/hooks/use-auth";
 import { useParams } from "react-router-dom";
 
-// import { useEdgeStore } from "@/lib/edgestore";
-
 interface EditorProps {
   onChange: (value: string) => void;
   initialContent?: string;
@@ -16,7 +14,7 @@ interface EditorProps {
 
 const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const { theme } = useTheme();
-  const { uploadImageDocument } = useBuckets();
+  const { uploadImageDocument, getPublicURL } = useBuckets();
   const { user } = useUser();
   const params = useParams();
 
@@ -28,7 +26,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
         file
       );
 
-      if (response.data) return response.data?.path;
+      if (response.data) return getPublicURL(response.data?.path);
     }
 
     return "";
@@ -49,7 +47,13 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     <div>
       <BlockNoteView
         editor={editor}
-        theme={theme === "dark" ? "dark" : "light"}
+        theme={
+          theme === "system"
+            ? "dark"
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light"
+        }
       />
     </div>
   );

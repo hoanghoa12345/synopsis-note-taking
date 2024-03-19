@@ -34,7 +34,7 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
       )}
     >
       {!!url && (
-        <img src={getPublicURL(url)} alt="Cover" className="object-cover w-full min-h-[35vh]" />
+        <img src={getPublicURL(url)} alt="Cover" className="object-cover w-full min-h-[35vh] max-h-80" />
       )}
       {url && !preview && (
         <div className="opacity-0 group-hover:opacity-100 absolute bottom-5 right-5 flex items-center gap-x-2">
