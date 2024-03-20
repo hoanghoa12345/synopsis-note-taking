@@ -43,18 +43,14 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     uploadFile: handleUpload,
   });
 
+  const getEditorTheme = () => {
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return theme === "system" ? (prefersDarkScheme ? "dark" : "light") : theme;
+  };
+
   return (
     <div>
-      <BlockNoteView
-        editor={editor}
-        theme={
-          theme === "system"
-            ? "dark"
-            : window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-        }
-      />
+      <BlockNoteView editor={editor} theme={getEditorTheme()} />
     </div>
   );
 };
