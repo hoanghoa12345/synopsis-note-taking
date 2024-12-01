@@ -1,10 +1,12 @@
 import { useTheme } from "@/components/providers/theme-provider";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import "@blocknote/core/style.css";
+import { useCreateBlockNote } from "@blocknote/react";
+import "@blocknote/shadcn/style.css";
 import { useBuckets } from "@/hooks/use-buckets";
 import { useUser } from "@/hooks/use-auth";
 import { useParams } from "react-router-dom";
+import { BlockNoteView } from "@blocknote/shadcn";
+import "@blocknote/core/fonts/inter.css";
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -32,25 +34,32 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     return "";
   };
 
-  const editor: BlockNoteEditor = useBlockNote({
-    editable,
+  const editor: BlockNoteEditor = useCreateBlockNote({
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
-    onEditorContentChange: (editor) => {
-      onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
-    },
     uploadFile: handleUpload,
   });
 
+  const handleChange = () => {
+    onChange(JSON.stringify(editor.document, null, 2));
+  };
+
   const getEditorTheme = () => {
-    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDarkScheme = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
     return theme === "system" ? (prefersDarkScheme ? "dark" : "light") : theme;
   };
 
   return (
     <div>
-      <BlockNoteView editor={editor} theme={getEditorTheme()} />
+      <BlockNoteView
+        editor={editor}
+        theme={getEditorTheme()}
+        editable={editable}
+        onChange={handleChange}
+      />
     </div>
   );
 };
