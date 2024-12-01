@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
+import { appConfig } from "@/lib/config";
 
 export const UserItem = () => {
   const { user, logout } = useUser();
@@ -26,7 +27,7 @@ export const UserItem = () => {
               </AvatarFallback>
             </Avatar>
             <span className="text-start font-medium line-clamp-1">
-              {user?.displayName}&apos;s Synopsis
+              {user?.displayName}&apos;s {appConfig.name}
             </span>
           </div>
           <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4" />
@@ -53,7 +54,7 @@ export const UserItem = () => {
             </div>
             <div className="space-y-1">
               <p className="text-sm line-clamp-1">
-                {user?.displayName}&apos;s Synopsis
+                {user?.displayName}&apos;s {appConfig.name}
               </p>
             </div>
           </div>

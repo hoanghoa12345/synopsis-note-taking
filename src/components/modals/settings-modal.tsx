@@ -2,6 +2,7 @@ import { useSettings } from "@/hooks/use-settings";
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
 import { ModeToggle } from "../mode-toggle";
 import { Label } from "../ui/label";
+import { appConfig } from "@/lib/config";
 
 export const SettingsModal = () => {
   const settings = useSettings();
@@ -20,7 +21,7 @@ export const SettingsModal = () => {
               Appearance
             </Label>
             <span className="text-[0.8rem] text-muted-foreground">
-              Customize how Synopsis looks on your device
+              Customize how {appConfig.name} looks on your device
             </span>
           </div>
           <ModeToggle />

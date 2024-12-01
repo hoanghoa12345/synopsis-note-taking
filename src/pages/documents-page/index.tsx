@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-auth";
 import { useDocuments } from "@/hooks/use-documents";
+import { appConfig } from "@/lib/config";
 import { Timestamp } from "firebase/firestore";
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -41,7 +42,7 @@ const DocumentsPage = () => {
         alt=""
       />
       <h2 className="text-lg font-medium">
-        Welcome to {user?.displayName}&apos;s Synopsis
+        Welcome to {user?.displayName}&apos;s {appConfig.name}
       </h2>
       <Button onClick={onCreate}>
         <PlusCircle className="h-4 w-4 mr-2" />

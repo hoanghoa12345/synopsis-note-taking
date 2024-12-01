@@ -8,6 +8,7 @@ import { Spinner } from "../spinner/spinner";
 import { Link } from "react-router-dom";
 import { SignInButton } from "./signin-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { appConfig } from "@/lib/config";
 
 export const Navbar = () => {
   const scrolled = useScrollTop();
@@ -33,7 +34,7 @@ export const Navbar = () => {
             </SignInButton>
             <SignInButton>
               <Button variant="default" size="sm">
-                Get Synopsis free
+                Get {appConfig.name} free
               </Button>
             </SignInButton>
           </>
@@ -41,7 +42,7 @@ export const Navbar = () => {
         {isAuthenticated && !isLoading && (
           <>
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/documents">Enter Synopsis</Link>
+              <Link to="/documents">Enter {appConfig.name}</Link>
             </Button>
             <Avatar>
               {user?.photoURL && (

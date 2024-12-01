@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { Mail } from "lucide-react";
 
 import { Icons } from "../icons/icons";
+import { appConfig } from "@/lib/config";
 
 export const SignInButton = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -47,7 +48,7 @@ export const SignInButton = ({ children }: { children: React.ReactNode }) => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Sign In</DialogTitle>
-          <DialogDescription>to continue to Synopsis</DialogDescription>
+          <DialogDescription>to continue to {appConfig.name}</DialogDescription>
         </DialogHeader>
         <div className="flex justify-center items-center">
           <div className="flex flex-col gap-4">

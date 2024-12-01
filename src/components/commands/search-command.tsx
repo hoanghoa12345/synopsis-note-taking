@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
 import { File } from "lucide-react";
 import { TDocument, useDocuments } from "@/hooks/use-documents";
+import { appConfig } from "@/lib/config";
 
 export const SearchCommand = () => {
   const { user } = useUser();
@@ -45,7 +46,7 @@ export const SearchCommand = () => {
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
       <CommandInput
-        placeholder={`Search ${user?.displayName}'s Synopsis...`}
+        placeholder={`Search ${user?.displayName}'s ${appConfig.name}...`}
       />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
