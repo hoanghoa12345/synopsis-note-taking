@@ -3,3 +3,7 @@ body,
 #root {
   height: 100%;
 }
+
+#root .bn-shadcn a {
+  color: #006bb3;
+}

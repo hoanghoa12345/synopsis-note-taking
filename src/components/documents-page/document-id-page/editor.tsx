@@ -1,11 +1,12 @@
 import { useTheme } from "@/components/providers/theme-provider";
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { BlockNoteEditor, PartialBlock, locales } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/shadcn/style.css";
 import { useBuckets } from "@/hooks/use-buckets";
 import { useUser } from "@/hooks/use-auth";
 import { useParams } from "react-router-dom";
 import { BlockNoteView } from "@blocknote/shadcn";
+import Link from "@tiptap/extension-link";
 import "@blocknote/core/fonts/inter.css";
 
 interface EditorProps {
@@ -39,6 +40,15 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
     uploadFile: handleUpload,
+    dictionary: locales.en,
+    _tiptapOptions: {
+      extensions: [
+        Link.configure({
+          openOnClick: false,
+          autolink: true,
+        }),
+      ],
+    },
   });
 
   const handleChange = () => {
