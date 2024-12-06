@@ -7,6 +7,11 @@ const TYPE_MAP = {
   gif: "image/gif",
 };
 
+type TFavicon = {
+  emojiUrl: string;
+  type: keyof typeof TYPE_MAP;
+};
+
 export const useFavicon = (
   newIcon: string = "",
   type: keyof typeof TYPE_MAP,
@@ -31,34 +36,22 @@ export const useFavicon = (
 };
 
 export const useEmojiIcon = () => {
-  const [favicon, setFavicon] = React.useState<string>("");
+  const [favicon, setFavicon] = React.useState<TFavicon>({
+    emojiUrl: "",
+    type: "png",
+  });
 
-  const setFaviconEmoji = React.useCallback((emoji: string) => {
-    setFavicon(emojiToDataUrl(emoji));
-  }, []);
+  const setFaviconEmoji = React.useCallback(
+    (emojiUrl: string, type: keyof typeof TYPE_MAP = "png") => {
+      setFavicon({
+        emojiUrl,
+        type,
+      });
+    },
+    []
+  );
 
-  const emojiToDataUrl = (emoji: string) => {
-    const size = 32;
-    const font = `26px Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`;
-
-    const canvas = document.createElement("canvas");
-    canvas.width = size;
-    canvas.height = size;
-
-    const context = canvas.getContext("2d");
-    if (context) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = "#000";
-      context.font = font;
-      context.textBaseline = "middle";
-      context.textAlign = "center";
-      context.fillText(emoji, size / 2, size / 2 + 2);
-    }
-
-    return canvas.toDataURL("image/png");
-  };
-
-  useFavicon(favicon, "png");
+  useFavicon(favicon.emojiUrl, favicon.type);
 
   return { setFaviconEmoji, favicon };
 };

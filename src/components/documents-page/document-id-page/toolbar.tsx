@@ -5,6 +5,7 @@ import { TDocument, useDocuments } from "@/hooks/use-documents";
 import { ImageIcon, Smile, X } from "lucide-react";
 import { ElementRef, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { Emoji } from "emoji-picker-react";
 
 interface ToolbarProps {
   initialData: TDocument;
@@ -62,7 +63,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         <div className="flex items-center gap-x-2 group/icon pt-6">
           <IconPicker onChange={onIconSelect}>
             <p className="text-6xl hover:opacity-75 transition">
-              {initialData.icon}
+              <Emoji unified={initialData.icon} size={60} />
             </p>
           </IconPicker>
           <Button

@@ -6,6 +6,7 @@ import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, C
 import { File } from "lucide-react";
 import { TDocument, useDocuments } from "@/hooks/use-documents";
 import { appConfig } from "@/lib/config";
+import { Emoji } from "emoji-picker-react";
 
 export const SearchCommand = () => {
   const { user } = useUser();
@@ -60,7 +61,7 @@ export const SearchCommand = () => {
             >
               {document.icon ? (
                 <p className="mr-2 text-[18px]">
-                  {document.icon}
+                  <Emoji unified={document.icon} size={18} />
                 </p>
               ) : (
                 <File className="mr-2 h-4 w-4" />

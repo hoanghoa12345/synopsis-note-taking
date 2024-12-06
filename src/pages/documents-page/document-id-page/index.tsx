@@ -7,6 +7,9 @@ import { useEmojiIcon } from "@/hooks/use-favicon";
 import { lazy, useEffect, useMemo, useState, Suspense } from "react";
 import { useParams } from "react-router-dom";
 import { useDebounce } from "usehooks-ts";
+import { emojiUrlByUnified } from "emoji-picker-react/src/dataUtils/emojiSelectors";
+import { EmojiStyle } from "emoji-picker-react";
+import { appConfig } from "@/lib/config";
 const DocumentIdPage = () => {
   const { documentId } = useParams();
 
@@ -14,15 +17,15 @@ const DocumentIdPage = () => {
   const [text, setText] = useState<string>();
   const debouncedValue = useDebounce<string | undefined>(text, 1000);
 
-  const {setFaviconEmoji} = useEmojiIcon()
+  const { setFaviconEmoji } = useEmojiIcon();
 
   useMemo(() => {
-    if(document && document.icon) {
-      setFaviconEmoji(document.icon)
-    }else {
-      setFaviconEmoji('📄')
+    if (document && document.icon) {
+      setFaviconEmoji(emojiUrlByUnified(document.icon, EmojiStyle.APPLE));
+    } else {
+      setFaviconEmoji(`/${appConfig.icon}`, "svg");
     }
-  },[document?.id])
+  }, [document?.id]);
 
   const Editor = useMemo(
     () =>

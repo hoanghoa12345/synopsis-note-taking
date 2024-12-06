@@ -7,6 +7,7 @@ import { useDocuments } from "@/hooks/use-documents";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Emoji } from "emoji-picker-react";
 
 interface ItemProps {
   id?: string;
@@ -108,7 +109,7 @@ export const Item = ({
       )}
       {documentIcon ? (
         <div className="shrink-0 h-[18px] mr-2 text-muted-foreground">
-          {documentIcon}
+          <Emoji unified={documentIcon} lazyLoad size={18}/>
         </div>
       ) : (
         <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />

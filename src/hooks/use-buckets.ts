@@ -29,14 +29,10 @@ export const useBuckets = () => {
   ) =>
     supabase.storage
       .from(NOTION_BUCKET)
-      .upload(
-        `${userId}/${documentId}/${file.name}.${file.name.split(".").pop()}`,
-        file,
-        {
-          cacheControl: "3600",
-          upsert: false,
-        }
-      );
+      .upload(`${userId}/${documentId}/${file.name}`, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
 
   return { uploadImage, getPublicURL, removeImage, uploadImageDocument };
 };

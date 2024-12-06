@@ -2,8 +2,23 @@ html,
 body,
 #root {
   height: 100%;
+  overflow: hidden;
 }
 
 #root .bn-shadcn a {
   color: #006bb3;
+}
+
+#root .bn-shadcn .bn-suggestion-menu {
+  max-height: inherit;
+}
+
+#root .bn-shadcn .bn-grid-suggestion-menu {
+  max-height: inherit;
+}
+
+#root .bn-shadcn.dark {
+  --background: 0 0% 12%;
+  --card: 0 0% 12%;
+  --popover: 0 0% 12%;
 }

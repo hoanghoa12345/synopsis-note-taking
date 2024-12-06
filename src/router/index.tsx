@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import Notes from "@/pages/Notes/Notes";
 import Login from "@/pages/login";
 import ResetPassword from "@/pages/reset-password/reset-password";
 import LandingPage from "@/pages/landing-page";
@@ -13,14 +12,6 @@ const router = createBrowserRouter([
   {
     index: true,
     element: <LandingPage />,
-  },
-  {
-    path: "/notes",
-    element: <Notes />,
-  },
-  {
-    path: "/notes/:noteId",
-    element: <Notes />,
   },
   {
     path: "/login",

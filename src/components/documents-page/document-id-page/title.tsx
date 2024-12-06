@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { TDocument, useDocuments } from "@/hooks/use-documents"
+import { Emoji } from "emoji-picker-react"
 import { useRef, useState } from "react"
 
 type TitleProps = {
@@ -44,7 +45,7 @@ export const Title = ({
   }
 
   return <div className="flex items-center gap-x-1">
-    {!!initialData.icon &&  <p>{initialData.icon}</p>}
+    {!!initialData.icon &&  <Emoji unified={initialData.icon} size={16}/>}
     {isEditing ? (
       <Input ref={inputRef} onClick={enableInput}
       onBlur={disableInput}
