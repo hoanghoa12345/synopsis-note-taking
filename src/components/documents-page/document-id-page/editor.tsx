@@ -1,19 +1,38 @@
 import { useTheme } from "@/components/providers/theme-provider";
-import { BlockNoteEditor, PartialBlock, locales } from "@blocknote/core";
-import { useCreateBlockNote } from "@blocknote/react";
+import {
+  BlockNoteSchema,
+  PartialBlock,
+  locales,
+  defaultBlockSpecs,
+  filterSuggestionItems,
+  insertOrUpdateBlock,
+} from "@blocknote/core";
+import {
+  SuggestionMenuController,
+  useCreateBlockNote,
+  getDefaultReactSlashMenuItems,
+} from "@blocknote/react";
 import "@blocknote/shadcn/style.css";
 import { useBuckets } from "@/hooks/use-buckets";
 import { useUser } from "@/hooks/use-auth";
 import { useParams } from "react-router-dom";
 import { BlockNoteView } from "@blocknote/shadcn";
 import Link from "@tiptap/extension-link";
-import "@blocknote/core/fonts/inter.css";
+import { YoutubeIcon } from "lucide-react";
+import { Embed } from "@/components/editor/embeds/embed";
 
 interface EditorProps {
   onChange: (value: string) => void;
   initialContent?: string;
   editable?: boolean;
 }
+
+export const schema = BlockNoteSchema.create({
+  blockSpecs: {
+    ...defaultBlockSpecs,
+    embed: Embed,
+  },
+});
 
 const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const { theme } = useTheme();
@@ -35,7 +54,8 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     return "";
   };
 
-  const editor: BlockNoteEditor = useCreateBlockNote({
+  const editor: typeof schema.BlockNoteEditor = useCreateBlockNote({
+    schema,
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
@@ -62,6 +82,22 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     return theme === "system" ? (prefersDarkScheme ? "dark" : "light") : theme;
   };
 
+  const insertYoutubeEmbedded = (editor: typeof schema.BlockNoteEditor) => {
+    return {
+      title: "Youtube",
+      onItemClick: async () => {
+        insertOrUpdateBlock(editor, {
+          type: "embed",
+          props: {
+            type: "youtube",
+          },
+        });
+      },
+      group: "Embeds",
+      icon: <YoutubeIcon />,
+    };
+  };
+
   return (
     <div>
       <BlockNoteView
@@ -69,7 +105,21 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
         theme={getEditorTheme()}
         editable={editable}
         onChange={handleChange}
-      />
+        slashMenu={false}
+      >
+        <SuggestionMenuController
+          triggerCharacter={"/"}
+          getItems={async (query) =>
+            filterSuggestionItems(
+              [
+                ...getDefaultReactSlashMenuItems(editor),
+                insertYoutubeEmbedded(editor),
+              ],
+              query
+            )
+          }
+        />
+      </BlockNoteView>
     </div>
   );
 };

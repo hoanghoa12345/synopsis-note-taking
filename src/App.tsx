@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./App.css";
 import {Toaster} from "sonner"
 import { ModalProvider } from "@/components/providers/modal-provider";
+import "@blocknote/core/fonts/inter.css";
 
 function App() {
   return (

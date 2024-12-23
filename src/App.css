@@ -5,8 +5,23 @@ body,
   overflow: hidden;
 }
 
+:root {
+  --color-link-text: #006bb3;
+  --color-link-text-dark: #00a8e8;
+}
+
 #root .bn-shadcn a {
-  color: #006bb3;
+  color: var(--color-link-text);
+}
+
+@media (prefers-color-scheme: dark) {
+  #root .bn-shadcn a {
+    color: var(--color-link-text-dark);
+  }
+}
+
+html.dark #root .bn-shadcn a {
+  color: var(--color-link-text-dark)
 }
 
 #root .bn-shadcn .bn-suggestion-menu {
