@@ -1,11 +1,11 @@
 import { useTheme } from "@/components/providers/theme-provider";
 import {
   BlockNoteSchema,
-  PartialBlock,
   locales,
   defaultBlockSpecs,
   filterSuggestionItems,
   insertOrUpdateBlock,
+  customizeCodeBlock,
 } from "@blocknote/core";
 import {
   SuggestionMenuController,
@@ -31,6 +31,32 @@ export const schema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
     embed: Embed,
+    codeBlock: customizeCodeBlock({
+      defaultLanguage: "javascript",
+      indentLineWithTab: true,
+      supportedLanguages: [
+        {
+          id: "javascript",
+          match: ["javascript", "js"],
+          name: "JavaScript",
+        },
+        {
+          id: "plaintext",
+          match: ["plaintext", "text"],
+          name: "Plain Text",
+        },
+        {
+          id: "sql",
+          match: ["sql"],
+          name: "SQL",
+        },
+        {
+          id: "html",
+          match: ["html"],
+          name: "HTML",
+        }
+      ],
+    }),
   },
 });
 
@@ -57,7 +83,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const editor: typeof schema.BlockNoteEditor = useCreateBlockNote({
     schema,
     initialContent: initialContent
-      ? (JSON.parse(initialContent) as PartialBlock[])
+      ? (JSON.parse(initialContent) as typeof schema.PartialBlock[])
       : undefined,
     uploadFile: handleUpload,
     dictionary: locales.en,

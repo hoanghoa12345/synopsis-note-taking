@@ -77,7 +77,9 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         </div>
       )}
       {!!initialData.icon && preview && (
-        <p className="text-6xl pt-6">{initialData.icon}</p>
+        <p className="text-6xl pt-6">
+          <Emoji unified={initialData.icon} size={60} />
+        </p>
       )}
       <div className="opacity-0 group-hover:opacity-100 flex items-center gap-x-1 py-4">
         {!initialData.icon && !preview && (

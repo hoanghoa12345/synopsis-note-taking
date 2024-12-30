@@ -1,30 +1,90 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+  CustomBlockConfig,
+  DefaultInlineContentSchema,
+  DefaultStyleSchema,
+  InlineContentSchema,
+  StyleSchema,
+} from "@blocknote/core";
+import {
+  ReactCustomBlockRenderProps,
+  useComponentsContext,
+  useDictionary,
+} from "@blocknote/react";
+import { ChangeEvent, useCallback, useState } from "react";
 
-export const YoutubeEmbed = (props: any) => {
-  if (!props.block.props.url) {
-    const handleSubmit = (e: any) => {
-      e.preventDefault();
-      const url = e.target.url.value;
-      props.editor.updateBlock(props.block, {
-        type: "embed",
-        props: {
-          ...props.block.props,
-          type: "youtube",
-          url,
-        },
-      });
-    };
+export const YoutubeEmbed = <
+  B extends CustomBlockConfig = CustomBlockConfig,
+  I extends InlineContentSchema = DefaultInlineContentSchema,
+  S extends StyleSchema = DefaultStyleSchema
+>(
+  props: ReactCustomBlockRenderProps<B, I, S>
+) => {
+  const Components = useComponentsContext()!;
+  const dict = useDictionary();
+
+  const [currentURL, setCurrentURL] = useState<string>("");
+
+  const { block, editor } = props;
+
+  const handleURLChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setCurrentURL(event.currentTarget.value);
+    },
+    []
+  );
+
+  const handleURLEnter = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        editor.updateBlock(block, {
+          type: "embed",
+          props: {
+            ...block.props,
+            type: "youtube",
+            url: currentURL,
+          },
+        });
+      }
+    },
+    [editor, block, currentURL]
+  );
+
+  const handleURLClick = useCallback(() => {
+    editor.updateBlock(block, {
+      type: "embed",
+      props: {
+        ...block.props,
+        type: "youtube",
+        url: currentURL,
+      },
+    });
+  }, [editor, block, currentURL]);
+
+  if (!block.props.url) {
     return (
-      <div>
-        <form onSubmit={handleSubmit}>
-          <Input placeholder="Enter the Youtube URL" name="url" id="url" />
-          <Button type="submit">Embed</Button>
-        </form>
-      </div>
+      <Components.FilePanel.TabPanel className="bn-tab-panel">
+        <Components.FilePanel.TextInput
+          className={"bn-text-input"}
+          placeholder={dict.file_panel.embed.url_placeholder + " (Youtube)"}
+          value={currentURL}
+          onChange={handleURLChange}
+          onKeyDown={handleURLEnter as any}
+          data-test={"embed-input"}
+        />
+        <Components.FilePanel.Button
+          className={"bn-button"}
+          onClick={handleURLClick}
+          data-test="embed-input-button"
+        >
+          {dict.file_panel.embed.embed_button["video"]}
+        </Components.FilePanel.Button>
+      </Components.FilePanel.TabPanel>
     );
   }
-  const videoId = new URL(props.block.props.url).searchParams.get("v");
+  const videoId = new URL(props.block.props.url as string).searchParams.get(
+    "v"
+  );
   return (
     <div
       style={{
