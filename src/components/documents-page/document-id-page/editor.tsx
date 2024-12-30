@@ -11,6 +11,7 @@ import {
   SuggestionMenuController,
   useCreateBlockNote,
   getDefaultReactSlashMenuItems,
+  LinkToolbarController,
 } from "@blocknote/react";
 import "@blocknote/shadcn/style.css";
 import { useBuckets } from "@/hooks/use-buckets";
@@ -20,6 +21,8 @@ import { BlockNoteView } from "@blocknote/shadcn";
 import Link from "@tiptap/extension-link";
 import { YoutubeIcon } from "lucide-react";
 import { Embed } from "@/components/editor/embeds/embed";
+import LinkToolbar from "@/components/editor/components/link-toolbar/link-toolbar";
+import { Bookmark } from "@/components/editor/components/bookmark";
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -34,29 +37,8 @@ export const schema = BlockNoteSchema.create({
     codeBlock: customizeCodeBlock({
       defaultLanguage: "javascript",
       indentLineWithTab: true,
-      supportedLanguages: [
-        {
-          id: "javascript",
-          match: ["javascript", "js"],
-          name: "JavaScript",
-        },
-        {
-          id: "plaintext",
-          match: ["plaintext", "text"],
-          name: "Plain Text",
-        },
-        {
-          id: "sql",
-          match: ["sql"],
-          name: "SQL",
-        },
-        {
-          id: "html",
-          match: ["html"],
-          name: "HTML",
-        }
-      ],
     }),
+    bookmark: Bookmark,
   },
 });
 
@@ -83,7 +65,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const editor: typeof schema.BlockNoteEditor = useCreateBlockNote({
     schema,
     initialContent: initialContent
-      ? (JSON.parse(initialContent) as typeof schema.PartialBlock[])
+      ? (JSON.parse(initialContent) as (typeof schema.PartialBlock)[])
       : undefined,
     uploadFile: handleUpload,
     dictionary: locales.en,
@@ -120,6 +102,8 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
         });
       },
       group: "Embeds",
+      subtext: "Insert a Youtube embedded video",
+      aliases: ["youtube", "yt"],
       icon: <YoutubeIcon />,
     };
   };
@@ -132,6 +116,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
         editable={editable}
         onChange={handleChange}
         slashMenu={false}
+        linkToolbar={false}
       >
         <SuggestionMenuController
           triggerCharacter={"/"}
@@ -144,6 +129,9 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
               query
             )
           }
+        />
+        <LinkToolbarController
+          linkToolbar={(props) => <LinkToolbar {...props} />}
         />
       </BlockNoteView>
     </div>
