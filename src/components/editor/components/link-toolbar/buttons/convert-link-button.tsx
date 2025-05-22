@@ -10,15 +10,37 @@ import { GalleryVertical } from "lucide-react";
 import useSWRMutation from "swr/mutation";
 
 type ResponseData = {
-  title: string;
-  description: string;
-  image: string;
-  poweredBy: string;
+  viewport: string
+  "theme-color": string
+  description: string
+  "twitter:site": string
+  "twitter:image": string
+  "twitter:domain": string
+  "twitter:description": string
+  "twitter:title": string
+  "twitter:creator": string
+  "twitter:card": string
+  "og:type": string
+  "og:image": string
+  "article:publisher": string
+  "article:published_time": string
+  "og:site_name": string
+  "og:title": string
+  "og:description": string
+  "og:url": string
+  "google-site-verification": string
+  robots: string
+  "next-head-count": string
+  title: string
 };
 
 async function fetchMetadata(url: string, { arg }: { arg: { url: string } }) {
-  return fetch(`${url}?url=${arg.url}`, {
+  return fetch(`${url}/api/meta?url=${arg.url}`, {
     method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": import.meta.env.VITE_METADATA_API_KEY,
+    }
   }).then((res) => res.json() as Promise<ResponseData>);
 }
 
@@ -32,7 +54,7 @@ export const ConvertLinkButton = (props: Pick<LinkToolbarProps, "url">) => {
   const selectedBlocks = useSelectedBlocks(editor);
   const block = selectedBlocks.length === 1 ? selectedBlocks[0] : undefined;
   const { trigger } = useSWRMutation(
-    import.meta.env.VITE_API_METADATA_URL,
+    import.meta.env.VITE_METADATA_API_URL,
     fetchMetadata,
     {
       populateCache: true,
@@ -44,6 +66,16 @@ export const ConvertLinkButton = (props: Pick<LinkToolbarProps, "url">) => {
     if (!block) return;
 
     try {
+      editor.updateBlock(block, {
+        type: "bookmark",
+        props: {
+          title: "Loading...",
+          description: "",
+          favicon: "",
+          thumbnail: "",
+          type: "",
+        },
+      });
       const result = await trigger({ url: props.url });
       editor.updateBlock(block, {
         type: "bookmark",
@@ -52,7 +84,7 @@ export const ConvertLinkButton = (props: Pick<LinkToolbarProps, "url">) => {
           title: result.title,
           description: result.description,
           favicon: "",
-          thumbnail: result.image,
+          thumbnail: result["og:image"],
           type: "",
         },
       });

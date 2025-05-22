@@ -57,12 +57,12 @@ export const Bookmark = createReactBlockSpec(
                 </div>
               </div>
             </a>
-            <div className="flex-[0_0_131px] md:flex-[0_0_180px]">
+            <div className="flex-[0_0_131px] md:flex-[0_0_180px] md:h-24">
               {thumbnail && (
                 <img
                   src={thumbnail}
                   alt="thumbnail"
-                  className="w-full h-full"
+                  className="w-full h-full object-contain md:max-h-24"
                 />
               )}
             </div>
